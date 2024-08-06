@@ -3,8 +3,7 @@ import {
   addGuest,
   editGuest,
   retriveGuest,
-} from "../controllers/guestController"; // Adjust the path as needed
-
+} from "../controllers/guestController"; 
 const router = Router();
 
 router.post("/guests", addGuest);

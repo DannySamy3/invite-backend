@@ -4,15 +4,7 @@ import client from "../dt";
 export const addPricePlan = async (req: Request, res: Response) => {
   const { family, single, double, id_foreign } = req.body;
 
-  // Basic validation
-  //   if (
-  //     typeof family !== "number" ||
-  //     typeof single !== "number" ||
-  //     typeof double !== "number" ||
-  //     typeof id_foreign !== "number"
-  //   ) {
-  //     return res.status(400).json({ error: "Invalid input data" });
-  //   }
+  
 
   try {
     const result = await client.query(

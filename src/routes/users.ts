@@ -5,7 +5,7 @@ import {
   registerUser,
   checkUser,
   getUserData,
-
+  logout,
 } from "../controllers/userController";
 
 const router = Router();
@@ -15,6 +15,7 @@ router.post("/users", registerUser);
 
 // Check User for Login
 router.post("/login", checkUser);
+router.post("/logout", (req, res) => logout);
 
 // Get User Data
 router.get("/users/data", authenticateJWT, getUserData);

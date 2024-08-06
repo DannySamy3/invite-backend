@@ -1,4 +1,4 @@
-// src/db.ts
+
 import { Client } from "pg";
 
 const client = new Client({

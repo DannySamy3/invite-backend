@@ -21,7 +21,7 @@ export const addGuest = async (req: Request, res: Response) => {
 export const editGuest = async (req: Request, res: Response) => {
   const { guest_id, status } = req.body;
 
-  // Ensure guest_id is provided
+  
   if (!guest_id) {
     return res.status(400).json({ error: "Guest ID is required" });
   }
@@ -35,7 +35,7 @@ export const editGuest = async (req: Request, res: Response) => {
       [status, guest_id]
     );
 
-    // Check if the row was updated
+  
     if (result.rowCount === 0) {
       return res.status(404).json({ error: "Guest not found" });
     }
@@ -51,7 +51,7 @@ export async function retriveGuest(req: Request, res: Response) {
   const { id } = req.query;
 
   try {
-    // Fetch the guest from the database
+   
     const result = await client.query(
       "SELECT first_name, last_name, status FROM guest WHERE guest_id = $1",
       [id]

@@ -54,7 +54,6 @@ exports.editGuest = editGuest;
 function retriveGuest(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const { id } = req.query;
-        console.log(id);
         try {
             // Fetch the guest from the database
             const result = yield dt_1.default.query("SELECT first_name, last_name, status FROM guest WHERE guest_id = $1", [id]);

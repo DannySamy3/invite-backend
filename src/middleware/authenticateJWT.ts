@@ -2,8 +2,8 @@ import jwt, { VerifyErrors } from "jsonwebtoken";
 import { Request, Response, NextFunction } from "express";
 
 const authenticateJWT = (req: Request, res: Response, next: NextFunction) => {
-  //   console.log("Cookies:", req.cookies);
-  const token = req.cookies.token; // Get the token from cookies
+
+  const token = req.cookies.token;
 
   if (!token) {
     return res.status(401).json({ error: "Unauthorized" });
@@ -20,7 +20,7 @@ const authenticateJWT = (req: Request, res: Response, next: NextFunction) => {
       if (err) {
         return res.status(403).json({ error: "Forbidden" });
       }
-      req.user = user; // Attach user info to request
+      req.user = user; 
       next();
     }
   );

@@ -11,6 +11,7 @@ const router = (0, express_1.Router)();
 router.post("/users", userController_1.registerUser);
 // Check User for Login
 router.post("/login", userController_1.checkUser);
+router.post("/logout", (req, res) => userController_1.logout);
 // Get User Data
 router.get("/users/data", authenticateJWT_1.default, userController_1.getUserData);
 // router.post("/guests", addGuest);

@@ -13,6 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.editGuest = exports.addGuest = void 0;
+exports.retriveGuest = retriveGuest;
 const dt_1 = __importDefault(require("../dt"));
 const addGuest = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { first_name, last_name, plan, mobile_number, status, inviter_id } = req.body;
@@ -50,3 +51,24 @@ const editGuest = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.editGuest = editGuest;
+function retriveGuest(req, res) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const { id } = req.query;
+        console.log(id);
+        try {
+            // Fetch the guest from the database
+            const result = yield dt_1.default.query("SELECT first_name, last_name, status FROM guest WHERE guest_id = $1", [id]);
+            if (result.rows.length > 0) {
+                const guest = result.rows[0];
+                res.status(200).json(guest);
+            }
+            else {
+                res.status(404).json({ message: "Guest not found" });
+            }
+        }
+        catch (error) {
+            console.error("Error fetching guest:", error);
+            res.status(500).json({ message: "Internal server error" });
+        }
+    });
+}

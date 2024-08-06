@@ -46,3 +46,25 @@ export const editGuest = async (req: Request, res: Response) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
+export async function retriveGuest(req: Request, res: Response) {
+  const { id } = req.query;
+
+  try {
+    // Fetch the guest from the database
+    const result = await client.query(
+      "SELECT first_name, last_name, status FROM guest WHERE guest_id = $1",
+      [id]
+    );
+
+    if (result.rows.length > 0) {
+      const guest = result.rows[0];
+      res.status(200).json(guest);
+    } else {
+      res.status(404).json({ message: "Guest not found" });
+    }
+  } catch (error) {
+    console.error("Error fetching guest:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}

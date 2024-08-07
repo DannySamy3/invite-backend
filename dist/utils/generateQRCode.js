@@ -16,9 +16,7 @@ exports.generateQRCode = void 0;
 const qrcode_1 = __importDefault(require("qrcode"));
 const generateQRCode = (data) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        // Convert data object to JSON string
         const jsonData = JSON.stringify(data);
-        // Generate QR code as a data URL
         const qrCodeDataUrl = yield qrcode_1.default.toDataURL(jsonData);
         return qrCodeDataUrl;
     }

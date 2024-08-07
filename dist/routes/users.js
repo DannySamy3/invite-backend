@@ -15,4 +15,5 @@ router.post("/logout", (req, res) => userController_1.logout);
 // Get User Data
 router.get("/users/data", authenticateJWT_1.default, userController_1.getUserData);
 // router.post("/guests", addGuest);
+router.get("/userById/:id", (req, res) => (0, userController_1.getUserId)(req, res));
 exports.default = router;

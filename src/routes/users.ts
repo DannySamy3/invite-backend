@@ -6,6 +6,7 @@ import {
   checkUser,
   getUserData,
   logout,
+  getUserId,
 } from "../controllers/userController";
 
 const router = Router();
@@ -21,4 +22,5 @@ router.post("/logout", (req, res) => logout);
 router.get("/users/data", authenticateJWT, getUserData);
 // router.post("/guests", addGuest);
 
+router.get("/userById/:id", (req, res) => getUserId(req, res));
 export default router;

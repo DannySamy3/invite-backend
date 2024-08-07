@@ -30,7 +30,6 @@ const addGuest = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 exports.addGuest = addGuest;
 const editGuest = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { guest_id, status } = req.body;
-    // Ensure guest_id is provided
     if (!guest_id) {
         return res.status(400).json({ error: "Guest ID is required" });
     }
@@ -39,7 +38,6 @@ const editGuest = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
        SET status = $1
        WHERE guest_id = $2
        RETURNING *`, [status, guest_id]);
-        // Check if the row was updated
         if (result.rowCount === 0) {
             return res.status(404).json({ error: "Guest not found" });
         }
@@ -55,7 +53,6 @@ function retriveGuest(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const { id } = req.query;
         try {
-            // Fetch the guest from the database
             const result = yield dt_1.default.query("SELECT first_name, last_name, status FROM guest WHERE guest_id = $1", [id]);
             if (result.rows.length > 0) {
                 const guest = result.rows[0];

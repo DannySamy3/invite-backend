@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.logout = exports.getUserData = exports.checkUser = exports.registerUser = void 0;
+exports.getUserId = exports.logout = exports.getUserData = exports.checkUser = exports.registerUser = void 0;
 exports.getUserByEmail = getUserByEmail;
 exports.validateUserPassword = validateUserPassword;
 const bcrypt_1 = __importDefault(require("bcrypt"));
@@ -22,7 +22,7 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const nookies_2 = require("nookies");
 dotenv_1.default.config();
-const JWT_SECRET = process.env.JWT_SECRET; // Import JWT_SECRET from environment variables
+const JWT_SECRET = process.env.JWT_SECRET;
 const registerUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { first_name, last_name, email, phone_number, country, password, gender, } = req.body;
     if (!first_name ||
@@ -48,7 +48,7 @@ const registerUser = (req, res) => __awaiter(void 0, void 0, void 0, function* (
         return res.status(201);
     }
     catch (error) {
-        console.error("Database insertion error:", error); // Log the error details
+        console.error("Database insertion error:", error);
         res.status(500).json({ error: "Internal Server Error" });
     }
 });
@@ -117,16 +117,32 @@ const getUserData = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
 exports.getUserData = getUserData;
 const logout = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        // Clear the JWT token cookie on the client
-        (0, nookies_1.destroyCookie)({ res }, 'token');
-        // Redirect to the login page or another page
-        res.writeHead(302, { Location: '/login' });
+        (0, nookies_1.destroyCookie)({ res }, "token");
+        res.writeHead(302, { Location: "/login" });
         res.end();
     }
     catch (error) {
-        console.error('Error during logout:', error);
-        res.writeHead(500, { Location: '/error' });
+        console.error("Error during logout:", error);
+        res.writeHead(500, { Location: "/error" });
         res.end();
     }
 });
 exports.logout = logout;
+const getUserId = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const userId = req.params.id;
+    try {
+        const { rows } = yield dt_1.default.query("SELECT * FROM users WHERE id = $1", [
+            userId,
+        ]);
+        if (rows.length === 0) {
+            return res.status(404).json({ message: "Guest not found" });
+        }
+        const user = rows[0];
+        return res.json(user);
+    }
+    catch (error) {
+        console.error("Error fetching guest by ID:", error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+});
+exports.getUserId = getUserId;

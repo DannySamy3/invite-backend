@@ -16,15 +16,6 @@ exports.addPricePlan = void 0;
 const dt_1 = __importDefault(require("../dt"));
 const addPricePlan = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { family, single, double, id_foreign } = req.body;
-    // Basic validation
-    //   if (
-    //     typeof family !== "number" ||
-    //     typeof single !== "number" ||
-    //     typeof double !== "number" ||
-    //     typeof id_foreign !== "number"
-    //   ) {
-    //     return res.status(400).json({ error: "Invalid input data" });
-    //   }
     try {
         const result = yield dt_1.default.query("INSERT INTO prices (family, single, double, id_foreign) VALUES ($1, $2, $3, $4) RETURNING *", [family, single, double, id_foreign]);
         res.status(201).json(result.rows[0]);

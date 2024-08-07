@@ -11,7 +11,7 @@ import dotenv from "dotenv";
 import { setCookie } from "nookies";
 
 dotenv.config();
-const JWT_SECRET = process.env.JWT_SECRET; 
+const JWT_SECRET = process.env.JWT_SECRET;
 
 export const registerUser = async (req: Request, res: Response) => {
   const {
@@ -52,7 +52,7 @@ export const registerUser = async (req: Request, res: Response) => {
     );
     return res.status(201);
   } catch (error) {
-    console.error("Database insertion error:", error); 
+    console.error("Database insertion error:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
@@ -124,15 +124,33 @@ export const getUserData = async (req: Request, res: Response) => {
 
 export const logout = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-   
-    destroyCookie({ res }, 'token');
+    destroyCookie({ res }, "token");
 
-  
-    res.writeHead(302, { Location: '/login' });
+    res.writeHead(302, { Location: "/login" });
     res.end();
   } catch (error) {
-    console.error('Error during logout:', error);
-    res.writeHead(500, { Location: '/error' });
+    console.error("Error during logout:", error);
+    res.writeHead(500, { Location: "/error" });
     res.end();
+  }
+};
+
+export const getUserId = async (req: Request, res: Response) => {
+  const userId = req.params.id;
+
+  try {
+    const { rows } = await client.query("SELECT * FROM users WHERE id = $1", [
+      userId,
+    ]);
+
+    if (rows.length === 0) {
+      return res.status(404).json({ message: "Guest not found" });
+    }
+
+    const user = rows[0];
+    return res.json(user);
+  } catch (error) {
+    console.error("Error fetching guest by ID:", error);
+    res.status(500).json({ message: "Internal server error" });
   }
 };

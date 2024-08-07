@@ -69,7 +69,6 @@ const getCardAndUserData = (req, res) => __awaiter(void 0, void 0, void 0, funct
         return res.status(400).json({ error: "Invalid user ID" });
     }
     try {
-        // Query to get card and guest data with full outer join
         const result = yield dt_1.default.query(`SELECT 
         card.id AS card_id,
         card.header_text, 
@@ -96,7 +95,6 @@ const getCardAndUserData = (req, res) => __awaiter(void 0, void 0, void 0, funct
         if (result.rows.length === 0) {
             return res.status(404).json({ message: "No data found for this user" });
         }
-        // const lastRow = result.rows[result.rows.length - 1];
         return res.status(200).json(result.rows);
     }
     catch (err) {

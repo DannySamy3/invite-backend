@@ -5,8 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const authenticateJWT = (req, res, next) => {
-    //   console.log("Cookies:", req.cookies);
-    const token = req.cookies.token; // Get the token from cookies
+    const token = req.cookies.token;
     if (!token) {
         return res.status(401).json({ error: "Unauthorized" });
     }
@@ -17,7 +16,7 @@ const authenticateJWT = (req, res, next) => {
         if (err) {
             return res.status(403).json({ error: "Forbidden" });
         }
-        req.user = user; // Attach user info to request
+        req.user = user;
         next();
     });
 };

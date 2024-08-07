@@ -3,7 +3,8 @@ import {
   addGuest,
   editGuest,
   retriveGuest,
-} from "../controllers/guestController"; 
+  getGuestPrice,
+} from "../controllers/guestController";
 const router = Router();
 
 router.post("/guests", addGuest);
@@ -13,5 +14,7 @@ router.get("/retrieve/guest", (req: Request, res: Response) =>
 router.post("/guests/edit", (req: Request, res: Response) =>
   editGuest(req, res)
 );
+
+router.get("guest/:Id", async (req, res) => {});
 
 export default router;

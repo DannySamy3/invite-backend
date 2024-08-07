@@ -21,7 +21,6 @@ export const addGuest = async (req: Request, res: Response) => {
 export const editGuest = async (req: Request, res: Response) => {
   const { guest_id, status } = req.body;
 
-  
   if (!guest_id) {
     return res.status(400).json({ error: "Guest ID is required" });
   }
@@ -35,7 +34,6 @@ export const editGuest = async (req: Request, res: Response) => {
       [status, guest_id]
     );
 
-  
     if (result.rowCount === 0) {
       return res.status(404).json({ error: "Guest not found" });
     }
@@ -51,7 +49,6 @@ export async function retriveGuest(req: Request, res: Response) {
   const { id } = req.query;
 
   try {
-   
     const result = await client.query(
       "SELECT first_name, last_name, status FROM guest WHERE guest_id = $1",
       [id]
@@ -68,3 +65,40 @@ export async function retriveGuest(req: Request, res: Response) {
     res.status(500).json({ message: "Internal server error" });
   }
 }
+
+export const getGuestPrice = async (req: Request, res: Response) => {
+  const guestId = req.query;
+  try {
+    const query = `
+      SELECT
+          g.guest_id,
+          g.first_name,
+          g.last_name,
+          g.plan,
+          p.family,
+          p.single,
+          p.double
+      FROM
+          guest g
+      JOIN
+          prices p ON g.plan = CASE
+                                WHEN g.plan = 'family' THEN p.family
+                                WHEN g.plan = 'single' THEN p.single
+                                WHEN g.plan = 'double' THEN p.double
+                              END
+      WHERE
+          g.guest_id = $1;
+    `;
+
+    const { rows } = await client.query(query, [guestId]);
+
+    if (rows.length > 0) {
+      return rows[0]; // Return the first row (assuming guest_id is unique)
+    } else {
+      return null; // Handle case where guest with given ID is not found
+    }
+  } catch (error) {
+    console.error("Error fetching guest price:", error);
+    throw error; // Propagate the error
+  }
+};

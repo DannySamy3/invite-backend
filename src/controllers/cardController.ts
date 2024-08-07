@@ -75,7 +75,6 @@ export const getCardAndUserData = async (req: Request, res: Response) => {
   }
 
   try {
-   
     const result = await client.query(
       `SELECT 
         card.id AS card_id,
@@ -102,12 +101,10 @@ export const getCardAndUserData = async (req: Request, res: Response) => {
       WHERE card.user_id = $1 OR guest.inviter_id = $1`,
       [userId]
     );
-
     if (result.rows.length === 0) {
       return res.status(404).json({ message: "No data found for this user" });
     }
 
-    
     return res.status(200).json(result.rows);
   } catch (err) {
     console.error("Error fetching data:", err);

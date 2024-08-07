@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.editGuest = exports.addGuest = void 0;
+exports.getGuestPrice = exports.editGuest = exports.addGuest = void 0;
 exports.retriveGuest = retriveGuest;
 const dt_1 = __importDefault(require("../dt"));
 const addGuest = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -68,3 +68,40 @@ function retriveGuest(req, res) {
         }
     });
 }
+const getGuestPrice = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const guestId = req.query;
+    try {
+        const query = `
+      SELECT
+          g.guest_id,
+          g.first_name,
+          g.last_name,
+          g.plan,
+          p.family,
+          p.single,
+          p.double
+      FROM
+          guest g
+      JOIN
+          prices p ON g.plan = CASE
+                                WHEN g.plan = 'family' THEN p.family
+                                WHEN g.plan = 'single' THEN p.single
+                                WHEN g.plan = 'double' THEN p.double
+                              END
+      WHERE
+          g.guest_id = $1;
+    `;
+        const { rows } = yield dt_1.default.query(query, [guestId]);
+        if (rows.length > 0) {
+            return rows[0]; // Return the first row (assuming guest_id is unique)
+        }
+        else {
+            return null; // Handle case where guest with given ID is not found
+        }
+    }
+    catch (error) {
+        console.error("Error fetching guest price:", error);
+        throw error; // Propagate the error
+    }
+});
+exports.getGuestPrice = getGuestPrice;
